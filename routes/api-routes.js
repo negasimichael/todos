@@ -6,7 +6,7 @@ router.get('/api/todos', async (req, res) => {
   try {
     const todos = await db.Todo.findAll()
     res.json(todos)
-  } catch (err) {
+  } catch(err) {
     res.status(500).send(err)
   }
 })
@@ -15,12 +15,25 @@ router.post('/api/todos', async (req, res) => {
   try {
     await db.Todo.create(req.body)
     res.status(200).send()
-  } catch (err) {
+  } catch(err) {
     res.status(500).send(err)
   }
 })
 
-// router.put()
+router.put('/api/todos/:id', async (req, res) => {
+  try {
+    const id = req.params.id
+
+    console.log(req.body)
+
+    await db.Todo.update(req.body, {
+      where: { id }
+    })
+    res.status(200).send()
+  } catch(err) {
+    res.status(500).send(err)
+  }
+})
 
 router.delete('/api/todos/:id', async (req, res) => {
   try {
@@ -29,7 +42,7 @@ router.delete('/api/todos/:id', async (req, res) => {
       where: { id }
     })
     res.status(200).send()
-  } catch (err) {
+  } catch(err) {
     res.status(500).send(err)
   }
 })
