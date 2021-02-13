@@ -22,6 +22,14 @@ document.addEventListener('DOMContentLoaded', (e) => {
     todoListSpan.innerHTML = todosHTML
   }
 
+  const deleteTodo = id => {
+    fetch(`/api/todos/${id}`, {
+      method: 'DELETE'
+    })
+      .then(getTodos)
+      .catch(err => console.error(err))
+  }
+
   form.addEventListener('submit', e => {
     e.preventDefault()
     const text = newTodoInput.value
@@ -34,6 +42,21 @@ document.addEventListener('DOMContentLoaded', (e) => {
     })
       .then(getTodos)
       .catch(err => console.error(err))
+  })
+
+  todoListSpan.addEventListener('click', e => {
+    const target = e.target
+    const id = target.getAttribute('data-id')
+    if (target.matches('.delete')) {
+      deleteTodo(id)
+    }else if (target.matches('.complete')){
+      const complete = JSON.parse(target.getAttribute('data-complete'))
+      const newTodo = {
+        id,
+        complete: !complete
+      }
+      updateTodos(newTodo)
+    }
   })
 
   getTodos()
